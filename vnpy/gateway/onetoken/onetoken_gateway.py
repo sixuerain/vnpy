@@ -64,7 +64,7 @@ class OnetokenGateway(BaseGateway):
     default_setting = {
         "OT Key": "",
         "OT Secret": "",
-        "交易所": ["BINANCE", "BITMEX", "OKEX", "OKEF"],
+        "交易所": ["BINANCE", "BITMEX", "OKEX", "OKEF", "HUOBIP", "HUOBIF"],
         "账户": "",
         "会话数": 3,
         "代理地址": "127.0.0.1",
@@ -260,7 +260,7 @@ class OnetokenRestApi(RestClient):
             symbol = instrument_data["name"]
             contract = ContractData(
                 symbol=symbol,
-                exchange=Exchange.OKEX,  # todo
+                exchange=Exchange(instrument_data['symbol'].split('/')[0].upper()),
                 name=symbol,
                 product=Product.SPOT,  # todo
                 size=float(instrument_data["min_amount"]),
