@@ -23,6 +23,7 @@ from vnpy.gateway.ctp import CtpGateway
 # from vnpy.gateway.tap import TapGateway
 # from vnpy.gateway.tora import ToraGateway
 # from vnpy.gateway.alpaca import AlpacaGateway
+from vnpy.gateway.rpc import RpcGateway
 
 from vnpy.app.cta_strategy import CtaStrategyApp
 # from vnpy.app.csv_loader import CsvLoaderApp
@@ -44,6 +45,7 @@ def main():
 
     # main_engine.add_gateway(BinanceGateway)
     main_engine.add_gateway(CtpGateway)
+    main_engine.add_gateway(RpcGateway)
     # main_engine.add_gateway(CtptestGateway)
     # main_engine.add_gateway(FemasGateway)
     # main_engine.add_gateway(IbGateway)

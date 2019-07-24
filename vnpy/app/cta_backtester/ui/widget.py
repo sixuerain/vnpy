@@ -41,6 +41,19 @@ class BacktesterManager(QtWidgets.QWidget):
         self.register_event()
         self.backtester_engine.init_engine()
 
+
+    def closeEvent(self, event):
+        print("close backtest")
+        thread = self.backtester_engine.thread
+        if thread:
+            thread.join()
+
+        # do stuff
+        if True:
+            event.accept() # let the window close
+        else:
+            event.ignore()
+
     def init_strategy_settings(self):
         """"""
         self.class_names = self.backtester_engine.get_strategy_class_names()
@@ -51,7 +64,10 @@ class BacktesterManager(QtWidgets.QWidget):
 
     def init_ui(self):
         """"""
+        print("init_ui")
         self.setWindowTitle("CTA回测")
+
+        self.backtester_engine.init_engine()
 
         # Setting Part
         self.class_combo = QtWidgets.QComboBox()

@@ -281,6 +281,7 @@ class ArrayManager(object):
         self.low_array = np.zeros(size)
         self.close_array = np.zeros(size)
         self.volume_array = np.zeros(size)
+        self.datetime_array = [i for i in range(size)]
 
     def update_bar(self, bar):
         """
@@ -290,17 +291,20 @@ class ArrayManager(object):
         if not self.inited and self.count >= self.size:
             self.inited = True
 
+        self.datetime_array[:-1] = self.datetime_array[1:]
         self.open_array[:-1] = self.open_array[1:]
         self.high_array[:-1] = self.high_array[1:]
         self.low_array[:-1] = self.low_array[1:]
         self.close_array[:-1] = self.close_array[1:]
         self.volume_array[:-1] = self.volume_array[1:]
 
+        self.datetime_array[-1] = bar.datetime
         self.open_array[-1] = bar.open_price
         self.high_array[-1] = bar.high_price
         self.low_array[-1] = bar.low_price
         self.close_array[-1] = bar.close_price
         self.volume_array[-1] = bar.volume
+        
 
     @property
     def open(self):

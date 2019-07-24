@@ -115,6 +115,7 @@ class CtaEngine(BaseEngine):
     def close(self):
         """"""
         self.stop_all_strategies()
+        self.init_engine()
 
     def register_event(self):
         """"""
@@ -740,6 +741,25 @@ class CtaEngine(BaseEngine):
 
         path2 = Path.cwd().joinpath("strategies")
         self.load_strategy_class_from_folder(path2, "strategies")
+
+        self.load_strategy_class_from_external('QAMagicTrade')
+
+    def load_strategy_class_from_external(self,module_name: str = "" ):
+        """
+        load strategy class from external module
+        """
+        try:
+            module = importlib.import_module(module_name)
+            
+            module_strategy_list = module.vnpy_get_strategylist()
+
+            for value in module_strategy_list:
+                if (isinstance(value, type) and issubclass(value, CtaTemplate) and value is not CtaTemplate):
+                    self.classes[value.__name__] = value
+        except:  # noqa
+            msg = f"策略文件{module_name}外部加载失败，触发异常：\n{traceback.format_exc()}"
+            self.write_log(msg)
+        
 
     def load_strategy_class_from_folder(self, path: Path, module_name: str = ""):
         """

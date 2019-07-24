@@ -271,15 +271,21 @@ class BacktestingEngine:
         # Use the first [days] of history data for initializing strategy
         day_count = 0
         ix = 0
-        
+        print("freq:{} days:{}".format(self.interval,self.days))
         for ix, data in enumerate(self.history_data):
-            if self.datetime and data.datetime.day != self.datetime.day:
+            if self.interval is Interval.MINUTE:
                 day_count += 1
                 if day_count >= self.days:
                     break
+            else:
+                if self.datetime and data.datetime.day != self.datetime.day:
+                    day_count += 1
+                    if day_count >= self.days:
+                        break
 
             self.datetime = data.datetime
             self.callback(data)
+
 
         self.strategy.inited = True
         self.output("策略初始化完成")
@@ -293,6 +299,8 @@ class BacktestingEngine:
             func(data)
 
         self.output("历史数据回放结束")
+        
+        self.strategy.on_stop()
 
     def calculate_result(self):
         """"""
